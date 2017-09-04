@@ -6,6 +6,12 @@
 provision.sh -h https://repository.host.com -u admin -p ****
 ```
 
+## Remove scripts
+
+```bash
+delete.sh -h https://repository.host.com -u admin -p ****
+```
+
 ## Call script
 
 
@@ -15,7 +21,7 @@ provision.sh -h https://repository.host.com -u admin -p ****
 curl -v -X POST -u admin:****** \
     --header "Content-Type: text/plain" \
     -d "{\"repoName\": \"raw-static-content\", \"assetName\": \"^prefix/.*\"}" \
-    https://repository.host.com/service/siesta/rest/v1/script/listAssets/run
+    https://repository.host.com/service/siesta/rest/v1/script/listRawAssets/run
 ```
 
 ### Delete assets
@@ -24,5 +30,5 @@ curl -v -X POST -u admin:****** \
 curl -v -X POST -u admin:****** \
     --header "Content-Type: text/plain" \
     -d "{\"repoName\": \"raw-static-content\", \"assetName\": \"^prefix/.*\"}" \
-    https://repository.host.com/service/siesta/rest/v1/script/deleteAssets/run
+    https://repository.host.com/service/siesta/rest/v1/script/deleteRawAssets/run
 ```

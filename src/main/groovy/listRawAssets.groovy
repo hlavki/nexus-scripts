@@ -15,6 +15,10 @@ assert request.assetName: 'name regular expression parameter is required, format
 log.info("Gathering Asset list for repository: ${request.repoName} as of pattern: ${request.assetName}")
 
 def repo = repository.repositoryManager.get(request.repoName)
+
+assert repo: "Repository ${request.repoName} does not exist"
+assert repo.format == 'raw': "Repository ${request.repoName} is not raw"
+
 StorageFacet storageFacet = repo.facet(StorageFacet)
 def tx = storageFacet.txSupplier().get()
 
