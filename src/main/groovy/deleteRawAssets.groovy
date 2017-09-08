@@ -1,6 +1,7 @@
 import org.sonatype.nexus.repository.storage.Asset
 import org.sonatype.nexus.repository.storage.Query
 import org.sonatype.nexus.repository.storage.StorageFacet
+import org.sonatype.nexus.repository.raw.internal.RawFormat
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -17,7 +18,7 @@ log.info("Gathering Asset list for repository: ${request.repoName} as of pattern
 def repo = repository.repositoryManager.get(request.repoName)
 
 assert repo: "Repository ${request.repoName} does not exist"
-assert repo.format == 'raw': "Repository ${request.repoName} is not raw"
+assert repo.format instanceof RawFormat: "Repository ${request.repoName} is not raw, but ${repo.format}"
 
 StorageFacet storageFacet = repo.facet(StorageFacet)
 def tx = storageFacet.txSupplier().get()
