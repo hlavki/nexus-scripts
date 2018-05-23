@@ -29,7 +29,7 @@ function addAndRunScript {
   groovy -Dgroovy.grape.report.downloads=true -Dgrape.config=grapeConfig.xml addUpdateScript.groovy -u "$username" -p "$password" -n "$name" -f "$file" -h "$host"
   printf "\nPublished $file as $name\n\n"
 
-  #curl -v -X POST -u $username:$password --header "Content-Type: text/plain" "$host/service/siesta/rest/v1/script/$name/run"
+  #curl -v -X POST -u "$username:$password" --header "Content-Type: text/plain" "$host/service/rest/v1/script/$name/run"
   #printf "\nSuccessfully executed $name script\n\n\n"
 }
 
@@ -38,5 +38,6 @@ printf "Publishing and executing on $host\n"
 
 addAndRunScript listRawAssets src/main/groovy/listRawAssets.groovy
 addAndRunScript deleteRawAssets src/main/groovy/deleteRawAssets.groovy
+addAndRunScript deleteDockerReleasedSnapshots src/main/groovy/deleteDockerReleasedSnapshots.groovy
 
 printf "\nProvisioning Scripts Completed\n\n"

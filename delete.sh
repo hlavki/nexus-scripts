@@ -24,7 +24,7 @@ echo $host
 function addAndRunScript {
   name=$1
 
-  curl -v -X DELETE -u $username:$password "$host/service/siesta/rest/v1/script/$name"
+  curl -v -X DELETE -u $username:$password "$host/service/rest/v1/script/$name"
   printf "\nDeleted script $name\n\n"
 }
 
@@ -33,5 +33,6 @@ printf "Publishing and executing on $host\n"
 
 addAndRunScript listRawAssets
 addAndRunScript deleteRawAssets
+addAndRunScript deleteDockerReleasedSnapshots
 
 printf "\nDeleting Scripts Completed\n\n"
