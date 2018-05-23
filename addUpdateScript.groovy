@@ -45,7 +45,7 @@ def file = new File(options.f)
 assert file.exists()
 
 def host = options.h ?: 'http://localhost:8081'
-def resource = 'service/siesta'
+def resource = 'service'
 
 ScriptClient scripts = new ResteasyClientBuilder()
 .build()
