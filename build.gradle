@@ -11,7 +11,7 @@ repositories {
     mavenCentral()
 }
 ext.versions = [
-    nxrm3: '3.5.1-02'
+    nxrm3: '3.6.0-02'
 ]
 
 dependencies {
@@ -20,5 +20,6 @@ dependencies {
     compile group: 'org.sonatype.nexus', name: 'nexus-security', version: versions.nxrm3
     compile group: 'org.sonatype.nexus', name: 'nexus-repository', version: versions.nxrm3
     compile group: 'org.sonatype.nexus.plugins', name: 'nexus-repository-maven', version: versions.nxrm3
+    compile group: 'org.sonatype.nexus.plugins', name: 'nexus-repository-raw', version: versions.nxrm3
     compile group: 'org.sonatype.nexus.plugins', name: 'nexus-script-plugin', version: versions.nxrm3
 }
