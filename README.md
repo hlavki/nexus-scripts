@@ -26,7 +26,7 @@ curl -v -X POST -u 'admin:******' \
   https://repository.example.com/service/rest/v1/script/deleteComponents/run
 ```
 
-then delete all orphaned asets like hashes, etc.
+then delete all orphaned assets like hashes, etc.
 ```bash
 curl -v -X POST -u 'admin:******' \
     --header "Content-Type: text/plain" \
