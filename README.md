@@ -31,7 +31,7 @@ then delete all orphaned asets like hashes, etc.
 curl -v -X POST -u 'admin:******' \
     --header "Content-Type: text/plain" \
     -d '{"repoName": "maven-snapshots", "assetName": "^com/example/app/.*"}' \
-    https://repository.xit.camp/service/rest/v1/script/deleteAssets/run
+    https://repository.example.com/service/rest/v1/script/deleteAssets/run
 ```
 
 ### List assets from RAW repository
