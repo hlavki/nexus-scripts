@@ -36,8 +36,10 @@ function addAndRunScript {
 printf "Provisioning Integration API Scripts Starting \n\n"
 printf "Publishing and executing on $host\n"
 
-addAndRunScript listRawAssets src/main/groovy/listRawAssets.groovy
-addAndRunScript deleteRawAssets src/main/groovy/deleteRawAssets.groovy
+addAndRunScript listAssets src/main/groovy/listAssets.groovy
+addAndRunScript deleteAssets src/main/groovy/deleteAssets.groovy
 addAndRunScript deleteDockerReleasedSnapshots src/main/groovy/deleteDockerReleasedSnapshots.groovy
+addAndRunScript listComponents src/main/groovy/listComponents.groovy
+addAndRunScript deleteComponents src/main/groovy/deleteComponents.groovy
 
 printf "\nProvisioning Scripts Completed\n\n"

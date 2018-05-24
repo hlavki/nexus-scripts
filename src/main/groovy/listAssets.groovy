@@ -18,7 +18,7 @@ log.info("Gathering Asset list for repository: ${request.repoName} as of pattern
 def repo = repository.repositoryManager.get(request.repoName)
 
 assert repo: "Repository ${request.repoName} does not exist"
-assert repo.format instanceof RawFormat: "Repository ${request.repoName} is not raw, but ${repo.format}"
+//assert repo.format instanceof RawFormat: "Repository ${request.repoName} is not raw, but ${repo.format}"
 
 StorageFacet storageFacet = repo.facet(StorageFacet)
 def tx = storageFacet.txSupplier().get()
@@ -29,14 +29,6 @@ Iterable<Asset> assets = tx.
     findAssets(Query.builder().where('name MATCHES ').param(request.assetName).build(), [repo])
 
 def urls = assets.collect { "/repository/${repo.name}/${it.name()}" }
-
-// Remove artifacts
-assets.each { asset ->
-    def component = tx.findComponent(asset.componentId());
-    log.info("Deleting asset ${asset.name()}")
-    tx.deleteAsset(asset);
-    tx.deleteComponent(component);
-}
 
 tx.commit()
 

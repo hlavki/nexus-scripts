@@ -31,8 +31,10 @@ function addAndRunScript {
 printf "Provisioning Integration API Scripts Starting \n\n"
 printf "Publishing and executing on $host\n"
 
-addAndRunScript listRawAssets
-addAndRunScript deleteRawAssets
+addAndRunScript listAssets
+addAndRunScript deleteAssets
 addAndRunScript deleteDockerReleasedSnapshots
+addAndRunScript listComponents
+addAndRunScript deleteComponents
 
 printf "\nDeleting Scripts Completed\n\n"
