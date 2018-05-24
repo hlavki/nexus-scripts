@@ -27,9 +27,9 @@ tx.begin()
 Iterable<Component> components = tx.findComponents(Query.builder().build(), [repo])
 
 def snapshots = components.findAll{ it.version().contains(SNAPSHOT_SUFFIX)}.collectEntries {[(it.name() + ":" + it.version()), it]}
-def releases = components.findAll{ !it.version().contains(SNAPSHOT_SUFFIX)}.collectEntries {[(it.name() + ":" + it.version()), it]}
+def releases = components.findAll{ !it.version().contains(SNAPSHOT_SUFFIX)}.collect {it.name() + ":" + it.version()}.toSet()
 
-def toRemove = snapshots.findAll{ k,v -> releases.containsKey(k - SNAPSHOT_SUFFIX) }.collect{ k, v -> v }
+def toRemove = snapshots.findAll{ k,v -> releases.contains(k - SNAPSHOT_SUFFIX) }.collect{ k, v -> v }
 
 toRemove.each { cmp ->
     log.info("Deleting component ${cmp.name()}:${cmp.version()}")
