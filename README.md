@@ -16,7 +16,7 @@ delete.sh -h https://repository.host.com -u admin -p ****
 
 ### Delete subtree in Maven repository
 
-Let's say you need to delete all artifacts with groupId prefix `com.example.app`
+Let's say you need to delete all artifacts with groupId prefix `com.example.app` in `maven-snapshots` repository
 
 first delete all components in subtree:
 ```bash
