@@ -23,14 +23,23 @@ assert repo: "Repository ${request.repoName} does not exist"
 StorageFacet storageFacet = repo.facet(StorageFacet)
 def tx = storageFacet.txSupplier().get()
 
-tx.begin()
+try {
+    tx.begin()
 
-Iterable<Asset> assets = tx.
-    findAssets(Query.builder().where('name MATCHES ').param(request.assetName).build(), [repo])
+    Iterable<Asset> assets = tx.
+        findAssets(Query.builder().where('name MATCHES ').param(request.assetName).build(), [repo])
 
-def urls = assets.collect { "/repository/${repo.name}/${it.name()}" }
+    def urls = assets.collect { "/repository/${repo.name}/${it.name()}" }
 
-tx.commit()
+    tx.commit()
+
+} catch (Exception e) {
+    log.warn("Error occurs while deleting snapshot images from docker repository: {}", e.toString())
+    tx.rollback()
+} finally {
+    // @todo Fix me! Danger Will Robinson!  
+    tx.close()
+}
 
 def result = JsonOutput.toJson([
         assets    : urls,

@@ -21,27 +21,35 @@ assert repo: "Repository ${request.repoName} does not exist"
 StorageFacet storageFacet = repo.facet(StorageFacet)
 def tx = storageFacet.txSupplier().get()
 
-tx.begin()
+try {
+    tx.begin()
 
-Query.Builder builder = Query.builder()
-if (request.group) {
-    builder = builder.where(' group MATCHES ').param(request.group);
+    Query.Builder builder = Query.builder()
+    if (request.group) {
+        builder = builder.where(' group MATCHES ').param(request.group);
+    }
+    if (request.name) {
+        builder = builder.hasWhere() ? builder.and(' name MATCHES ').param(request.name) : builder.where(' name MATCHES ').param(request.name)
+    }
+
+    Iterable<Component> components = tx.findComponents(builder.build(), [repo])
+
+    def cmps = components.collect {
+        [
+            group: it.group(),
+            name: it.name(),
+            version: it.version()
+        ]
+    }
+
+    tx.commit()
+} catch (Exception e) {
+    log.warn("Error occurs while deleting snapshot images from docker repository: {}", e.toString())
+    tx.rollback()
+} finally {
+    // @todo Fix me! Danger Will Robinson!  
+    tx.close()
 }
-if (request.name) {
-    builder = builder.hasWhere() ? builder.and(' name MATCHES ').param(request.name) : builder.where(' name MATCHES ').param(request.name)
-}
-
-Iterable<Component> components = tx.findComponents(builder.build(), [repo])
-
-def cmps = components.collect {
-    [
-        group: it.group(),
-        name: it.name(),
-        version: it.version()
-    ]
-}
-
-tx.commit()
 
 def result = JsonOutput.toJson([
         components : cmps,

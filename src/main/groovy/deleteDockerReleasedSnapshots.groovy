@@ -22,30 +22,39 @@ assert repo: "Repository ${request.repoName} does not exist"
 StorageFacet storageFacet = repo.facet(StorageFacet)
 def tx = storageFacet.txSupplier().get()
 
-tx.begin()
+try {
+    tx.begin()
 
-Iterable<Component> components = tx.findComponents(Query.builder().build(), [repo])
+    Iterable<Component> components = tx.findComponents(Query.builder().build(), [repo])
 
-def snapshots = components.findAll{ it.version().contains(SNAPSHOT_SUFFIX)}.collectEntries {[(it.name() + ":" + it.version()), it]}
-def releases = components.findAll{ !it.version().contains(SNAPSHOT_SUFFIX)}.collect {it.name() + ":" + it.version()}.toSet()
+    def snapshots = components.findAll{ it.version().contains(SNAPSHOT_SUFFIX)}.collectEntries {[(it.name() + ":" + it.version()), it]}
+    def releases = components.findAll{ !it.version().contains(SNAPSHOT_SUFFIX)}.collect {it.name() + ":" + it.version()}.toSet()
 
-def toRemove = snapshots.findAll{ k,v -> releases.contains(k - SNAPSHOT_SUFFIX) }.collect{ k, v -> v }
+    def toRemove = snapshots.findAll{ k,v -> releases.contains(k - SNAPSHOT_SUFFIX) }.collect{ k, v -> v }
 
-toRemove.each { cmp ->
-    log.info("Deleting component ${cmp.name()}:${cmp.version()}")
-    tx.deleteComponent(cmp)
+    toRemove.each { cmp ->
+        log.info("Deleting component ${cmp.name()}:${cmp.version()}")
+        tx.deleteComponent(cmp)
+    }
+
+    def removed = toRemove.collect {
+        [
+            group: it.group(),
+            name: it.name(),
+            version: it.version()
+        ]
+    }
+
+    tx.commit()
+    
+} catch (Exception e) {
+    log.warn("Error occurs while deleting snapshot images from docker repository: {}", e.toString())
+    tx.rollback()
+} finally {
+    // @todo Fix me! Danger Will Robinson!  
+    tx.close()
 }
-
-def removed = toRemove.collect {
-    [
-        group: it.group(),
-        name: it.name(),
-        version: it.version()
-    ]
-}
-
-tx.commit()
-
+    
 def result = JsonOutput.toJson([
         removedComponents : removed,
         repoName   : request.repoName
