@@ -48,6 +48,15 @@ try {
     }
 
     tx.commit()
+
+    def result = JsonOutput.toJson([
+        components : cmps,
+        group      : request.group,
+        name       : request.name,
+        repoName   : request.repoName
+    ])
+    return result
+
 } catch (Exception e) {
     log.warn("Error occurs while deleting snapshot images from docker repository: {}", e.toString())
     tx.rollback()
@@ -55,11 +64,3 @@ try {
     // @todo Fix me! Danger Will Robinson!  
     tx.close()
 }
-
-def result = JsonOutput.toJson([
-        components : cmps,
-        group      : request.group,
-        name       : request.name,
-        repoName   : request.repoName
-    ])
-return result
