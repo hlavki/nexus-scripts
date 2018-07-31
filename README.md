@@ -43,7 +43,7 @@ curl -v -X POST -u admin:****** \
     https://repository.host.com/service/rest/v1/script/listAssets/run
 ```
 
-### List assets from RAW repository
+### Delete assets from RAW repository
 
 ```bash
 curl -v -X POST -u admin:****** \
