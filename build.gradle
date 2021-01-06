@@ -11,7 +11,7 @@ repositories {
     mavenCentral()
 }
 ext.versions = [
-    nxrm3: '3.6.0-02'
+    nxrm3: '3.29.1-01'
 ]
 
 dependencies {
